@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "jSgrROtyARw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\NotesAndTraining\\Scripts\\ag_script\\repos\\SeleniumTesting\\SeleniumTesting\\SeleniumTesting.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\aguthr01\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\aguthr01\\.nuget\\packages\\selenium.support\\4.21.0\\selenium.support.4.21.0.nupkg.sha512",
+    "C:\\Users\\aguthr01\\.nuget\\packages\\selenium.webdriver\\4.21.0\\selenium.webdriver.4.21.0.nupkg.sha512"
+  ],
+  "logs": []
+}

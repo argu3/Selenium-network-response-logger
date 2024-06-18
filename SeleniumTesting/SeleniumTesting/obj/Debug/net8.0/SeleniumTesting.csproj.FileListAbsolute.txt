@@ -1,0 +1,44 @@
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\linux\selenium-manager
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\macos\selenium-manager
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\windows\selenium-manager.exe
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.exe
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.deps.json
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.runtimeconfig.json
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.pdb
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\WebDriver.Support.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\WebDriver.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.csproj.AssemblyReference.cache
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.AssemblyInfoInputs.cache
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.AssemblyInfo.cs
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.csproj.CoreCompileInputs.cache
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\Selenium.24E01A10.Up2Date
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\refint\SeleniumTesting.dll
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.pdb
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.genruntimeconfig.cache
+C:\Users\aguthr01\source\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\ref\SeleniumTesting.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\linux\selenium-manager
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\macos\selenium-manager
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\selenium-manager\windows\selenium-manager.exe
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.exe
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.deps.json
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.runtimeconfig.json
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\SeleniumTesting.pdb
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\WebDriver.Support.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\bin\Debug\net8.0\WebDriver.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.csproj.AssemblyReference.cache
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.AssemblyInfoInputs.cache
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.AssemblyInfo.cs
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.csproj.CoreCompileInputs.cache
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\Selenium.24E01A10.Up2Date
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\refint\SeleniumTesting.dll
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.pdb
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\SeleniumTesting.genruntimeconfig.cache
+C:\Users\aguthr01\OneDrive - AHS\Desktop\NotesAndTraining\Scripts\ag_script\repos\SeleniumTesting\SeleniumTesting\obj\Debug\net8.0\ref\SeleniumTesting.dll
