@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Chromium;
@@ -8,73 +9,137 @@ using OpenQA.Selenium.Support.Events;
 using System;
 using System.Text.Json.Nodes;
 using static System.Net.WebRequestMethods;
+using System.Linq;
 
 namespace SeleniumTesting
 {
-    class LogReader
+    class ResponseLogger
     {
+
+        static int lockCounter = 0;
+        private static Mutex counterLock = new Mutex(false);
         private static Mutex logLock = new Mutex(false);
-        //https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/implementing-the-event-based-asynchronous-pattern
         static ChromeDriver chromeDriver = InitializeDriver();
-        static IReadOnlyCollection<OpenQA.Selenium.LogEntry> logEntries = new List<OpenQA.Selenium.LogEntry>();
-        static Logs perfLogs = new Logs(chromeDriver);
-        static List<IReadOnlyCollection<OpenQA.Selenium.LogEntry>> entryCollection = new List<IReadOnlyCollection<OpenQA.Selenium.LogEntry>>();
-        static List<JToken> eventCollection = new List<JToken>();
+        //static IReadOnlyCollection<OpenQA.Selenium.LogEntry> logEntries = new List<OpenQA.Selenium.LogEntry>();
+        //static Logs perfLogs = new Logs(chromeDriver);
+        //static List<IReadOnlyCollection<OpenQA.Selenium.LogEntry>> entryCollection = new List<IReadOnlyCollection<OpenQA.Selenium.LogEntry>>();
+        //static List<JToken> eventCollection = new List<JToken>();
         static bool oneTime = true;
 
-        static String importantLogPath = "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\NotesAndTraining\\Scripts\\ag_script\\ReceivingScript\\DatabaseUpdates\\verizonOrdersLog.txt";
-        static String otherLogPath = "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\NotesAndTraining\\Scripts\\ag_script\\ReceivingScript\\DatabaseUpdates\\otherLog.txt";
+        static string[] exactImportantHeaderURLs = new string[0];
+        static string[] fuzzyImportantHeaderURLs = new string[0];
+        static string importantLogPath = "";
+        static string otherLogPath = "";
+        static string url = "";
         static void Main(string[] args)
         {
-            //chromeDriver.GetDevToolsSession().DevToolsEventReceived += GetNetworkResponse;
+            
+            bool checkArgs = true;
+            if (args.Length == 0)
+            {
+                //args = mockArgs;
+            }
+            for(int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "help" || args[i] == "?")
+                {
+                    Console.WriteLine("Parameters:" +
+                        "\n1: The path to the text file which holds the filtered network responses." +
+                        "\n2: The path to the text file which holds all other responses." +
+                        "\n3: Comma-separated list of partially-matching response header URLs used to filter the responses" +
+                        "\n4: Comma-separated list of exactly matching response header URLs used to filter the responses" +
+                        "\n5: URL for the initial navigation. *using this may break the program*");
 
+                    checkArgs = false;
+                    return;
+                }
+                else if(checkArgs)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            importantLogPath = args[i]; break;
+                        case 1:
+                            otherLogPath = args[i]; break;
+                        case 2:
+                            if (fuzzyImportantHeaderURLs.Contains(","))
+                            {
+                                fuzzyImportantHeaderURLs = args[i].Split(','); 
+                            }
+                            else
+                            {
+                                fuzzyImportantHeaderURLs = [args[i]];
+                            }
+                            break;
+                        case 3:
+                            if (exactImportantHeaderURLs.Contains(","))
+                            {
+                                exactImportantHeaderURLs = args[i].Split(',');
+                            }
+                            else
+                            {
+                                exactImportantHeaderURLs = [args[i]];
+                            }
+                            break;
+                        case 4:
+                            url = args[i];
+                            break;
+                    }
+                }
+                if(fuzzyImportantHeaderURLs == null)
+                {
+                    fuzzyImportantHeaderURLs = new string[0];
+                }
+            }
             NetworkManager networkManager = new NetworkManager(chromeDriver);
             NetworkResponseHandler networkResponseHandler = new NetworkResponseHandler();
             networkResponseHandler.ResponseMatcher = ResponseReader;
             networkResponseHandler.ResponseTransformer = ResponseTransformer;
             networkManager.AddResponseHandler(networkResponseHandler);
-            networkManager.NetworkResponseReceived += ResponseReceivedAsync;
+            networkManager.NetworkResponseReceived += ResponseReceivedAsync; //this.ResponseReceivedAsync;
             networkManager.StartMonitoring();
-
-            String url = "https://mb.verizonwireless.com/mbt/secure/index?appName=esm#/esm/dashboard";
-            //String url = "https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.sorteddictionary-2?view=net-8.0&redirectedfrom=MSDN";
-            chromeDriver.Navigate().GoToUrl(url);
+            if (url.Length != 0) { chromeDriver.Navigate().GoToUrl(url); }
             //https://codoid.com/selenium-testing/how-to-use-selenium-webdriver-event-listener/#:~:text=How%20to%20use%20Selenium%20WebDriver%20Event%20Listener%3F%201,afterFindBy%20...%205%20beforeClickOn%20...%206%20Conclusion%20
             while (true)
             {
-                /*
-                if (entryCollection.Count > 3 && oneTime)
-                {
-                    
-                    NetEvent += WriteEvent;
-                    oneTime = false;
-                }
-                */
+                //do nothing
             }
         }
 
-        private static void ResponseReceivedAsync(object? sender, NetworkResponseReceivedEventArgs e)
+        static void ResponseReceivedAsync(object? sender, NetworkResponseReceivedEventArgs e)
         {
-            //I think doing this directly in this method was causing a timeout of some sort?
+            //debugging step, this task could be in the main body here
+            //this.LogNetworkResponse(e);
             LogNetworkResponse(e);
         }
 
-        static async Task LogNetworkResponse(NetworkResponseReceivedEventArgs e)
+        //public virtual async Task LogNetworkResponse(NetworkResponseReceivedEventArgs e)
+        public static async Task LogNetworkResponse(NetworkResponseReceivedEventArgs e)
         {
-            Console.WriteLine("NetworkresponseReceived, waiting");
+            counterLock.WaitOne();
+            lockCounter++;
+            int localCounter = lockCounter;
+            //Console.WriteLine($"NetworkresponseReceived, waiting {localCounter}");
+            counterLock.ReleaseMutex();
             logLock.WaitOne();
             //Console.WriteLine("start of write");
             String path = otherLogPath;
             if (e.ResponseUrl != null)
             {
-                if (e.ResponseUrl == "https://mb.verizonwireless.com/mbt/secure/pendingordersvc/mbt/orderdetails" || e.ResponseUrl == "https://mb.verizonwireless.com/mbt/secure/pendingordersvc/mbt/orders")
+                var query = from url in fuzzyImportantHeaderURLs
+                            where url.Contains(e.ResponseUrl) || e.ResponseUrl.Contains(url)
+                            select url;
+                if (exactImportantHeaderURLs.Contains(e.ResponseUrl) ||query.Any())
                 {
                     path = importantLogPath;
                 }
-                System.IO.File.AppendAllText(path, e.ResponseUrl);
-                System.IO.File.AppendAllText(path, "\n");
+                else
+                {
+                    System.IO.File.AppendAllText(path, e.ResponseUrl);
+                    System.IO.File.AppendAllText(path, "\n");
+                }
             }
-            else
+            else if (path == otherLogPath)
             {
                 System.IO.File.AppendAllText(path, "no response url");
                 System.IO.File.AppendAllText(path, "\n");
@@ -89,149 +154,31 @@ namespace SeleniumTesting
                 System.IO.File.AppendAllText(path, "empty response body");
                 System.IO.File.AppendAllText(path, "\n");
             }
-
-            System.IO.File.AppendAllText(path, "GuthrieIterator\n");
-            //System.IO.File.AppendAllText(path, DateTime.Now.ToString());
             //Console.WriteLine("end of write");
             logLock.ReleaseMutex();
+            //Console.BackgroundColor = ConsoleColor.Red;
+            //Console.WriteLine($"NetworkresponseReceived, releasing {localCounter}");
+            //Console.BackgroundColor = ConsoleColor.Black;
         }
-        static event Func<HttpResponseData, bool> ResponseReader = response =>
-        {
-            if(response.Url.Contains("atlantichealth") || response.Url.Contains("login.microsoft"))
-            {
-                Console.WriteLine($"     {response.Url}");
-                Console.WriteLine("     not matched");
-                return false;
-            }
-            Console.WriteLine($"     {response.Url}");
-            Console.WriteLine("     matched");
-            return true;
-        };
+        static event Func<HttpResponseData, bool> ResponseReader = response => true;
         //hangs if I don't have it, just a passthrough
         static event Func<HttpResponseData, HttpResponseData> ResponseTransformer = response => response;
-
         static ChromeDriver InitializeDriver()
         {
             ChromeOptions options = new ChromeOptions();
             String appData = $"user-data-dir={Path.GetPathRoot(Environment.SystemDirectory)}users\\{Environment.UserName}\\AppData\\Local\\Google\\Chrome\\User Data";
             options.AddArgument(appData);
-            ChromiumPerformanceLoggingPreferences pref = new ChromiumPerformanceLoggingPreferences();
-            pref.IsCollectingNetworkEvents = true;
-            options.PerformanceLoggingPreferences = pref;
-            options.SetLoggingPreference(LogType.Performance, LogLevel.All);
+            options.AddExcludedArgument("enable-automation");
+            //ChromiumPerformanceLoggingPreferences pref = new ChromiumPerformanceLoggingPreferences();
+            //pref.IsCollectingNetworkEvents = true;
+            //options.PerformanceLoggingPreferences = pref;
+            //options.SetLoggingPreference(LogType.Performance, LogLevel.All);
+            //service.LogPath = "logpath";
+            //service.EnableVerboseLogging = true;
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
-            service.LogPath = "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\log.txt";
-            service.EnableVerboseLogging = true;
             service.HideCommandPromptWindow = true;
             ChromeDriver driver = new ChromeDriver(service, options);
             return driver;
         }
-
-        static async void GetNetworkResponse(object? sender, DevToolsEventReceivedEventArgs e)
-        {
-            //https://stackoverflow.com/questions/27761852/how-do-i-await-events-in-c
-            Func<object?, DevToolsEventReceivedEventArgs, Task> handler = NetEvent;
-            if (handler != null)
-            {
-                Delegate[] invocationList = handler.GetInvocationList();
-                Task[] handlerTasks = new Task[invocationList.Length];
-
-                for (int i = 0; i < invocationList.Length; i++)
-                {
-                    handlerTasks[i] = ((Func<object, EventArgs, Task>)invocationList[i])(null, EventArgs.Empty);
-                }
-                Console.WriteLine($"task count {invocationList.Length}");
-                //WriteEvent(sender, e);
-                if (invocationList.Length > 1)
-                {
-                    await Task.WhenAll(handlerTasks);
-                    Console.WriteLine("DoneWaiting");
-                }
-            }
-            //Console.WriteLine("Response");
-            JToken data = e.EventData;
-            eventCollection.Add(data);
-            //Console.WriteLine("start");
-            foreach (String type in perfLogs.AvailableLogTypes)
-            {
-                //Console.WriteLine($"type: {type}");
-                logEntries = perfLogs.GetLog(type);
-                if (logEntries.Count > 0)
-                {
-                    //Console.WriteLine($"entry amounts: {logEntries.Count}");
-                    entryCollection.Add(logEntries);
-                    /*
-                    foreach (OpenQA.Selenium.LogEntry logEntry in logEntries)
-                    {
-                        if(logEntry.ToString().Contains("Andrew") || logEntry.ToString().Contains("andrew") || logEntry.ToString().Contains("andrgu3"))
-                        {
-                            //Console.WriteLine(logEntry.ToString());
-                        }
-                        //String path = "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\NotesAndTraining\\Scripts\\ag_script\\ReceivingScript\\DatabaseUpdates\\log.txt";
-                        //System.IO.File.AppendAllText(path, logEntry.ToString());
-                        //System.IO.File.AppendAllText(path, DateTime.Now.ToString());
-                    }
-                    */
-                }
-            }
-            //Console.WriteLine("end");
-        }
-
-        static event Func<object?, EventArgs, Task> NetEvent;
-        static async System.Threading.Tasks.Task WriteEvent(object? sender, EventArgs e)
-        {
-            Console.WriteLine("start of write");
-            String path = "C:\\Users\\aguthr01\\OneDrive - AHS\\Desktop\\NotesAndTraining\\Scripts\\ag_script\\ReceivingScript\\DatabaseUpdates\\log.txt";
-            foreach (IReadOnlyCollection<OpenQA.Selenium.LogEntry> entry in entryCollection)
-            {
-                foreach (OpenQA.Selenium.LogEntry logEntry in entry)
-                {
-                    System.IO.File.AppendAllText(path, logEntry.ToString());
-                    System.IO.File.AppendAllText(path, "GuthrieIterator");
-                    //System.IO.File.AppendAllText(path, DateTime.Now.ToString());
-                }
-            }
-            System.IO.File.AppendAllText(path, "GuthrieIterator StartOfJson");
-            foreach (JObject logEntry in eventCollection)
-            {
-                System.IO.File.AppendAllText(path, logEntry.ToString());
-                System.IO.File.AppendAllText(path, "GuthrieIterator");
-            }
-            Console.WriteLine("end of write");
-            /*
-            HttpRequestData requestData = new HttpRequestData();
-            requestData.Url = "https://mb.verizonwireless.com/mbt/secure/pendingordersvc/mbt/orders";
-            requestData.Headers = new Dictionary<String, String>() { { "Content-type", "application/json" } };
-            requestData.Method = "POST";
-            requestData.PostData = "{\"columnNames\":[\"\"],\"ecpdId\":\"72816\",\"facetEnabled\":true,\"searchFilter\":{\"days\":\"30\",\"filters\":[{\"serachBy\":\" \",\"serachValue\":[\" \"]}],\"fromDate\":\"\",\"toDate\":\"\"},\"sortResults\":{},\"userId\":\"ANDRGU3\",\"loggedInEmailId\":\"Andrew.Guthrie@atlantichealth.org\",\"csr\":false,\"quoteType\":\"\"}";
-            JObject j = JObject.Parse(e.EventData.ToString());
-            if (j["method"] != null)
-            {
-                if (j["method"].ToString() == requestData.Method)
-                {
-                    Console.WriteLine("POST");
-                    if (j["url"] != null)
-                    {
-                        if (j["url"].ToString() == requestData.Url)
-                        {
-                            Console.WriteLine("URL");
-                            if (j["postdata"] != null)
-                            {
-                                if(j["postdata"].ToString() == requestData.PostData)
-                                {
-                                    Console.WriteLine(e.EventData.ToString());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            NetworkResponseHandler networkResponseHandler = new NetworkResponseHandler();
-            Console.WriteLine(e.EventData.ToString());
-            Console.WriteLine("#######################");
-            */
-        }
-
-
     }
 }
